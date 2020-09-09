@@ -1,7 +1,5 @@
 package starwars.challenge.planets.api.controllers;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ public class PlanetsControllerTest {
     private MockMvc mockMvc;
     PlanetsController planetsController;
     PlanetsService mockService = mock(PlanetsService.class);
-    private String URL;
 
     @Before
     public void setUp() {
@@ -36,7 +34,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnArrayOfPlanets() throws Exception {
+    public void testShouldReturnArrayOfPlanetsWhenGettingPlanets() throws Exception {
 
         List<String> planets = new ArrayList<>();
         planets.add("Dagobah");
@@ -56,6 +54,50 @@ public class PlanetsControllerTest {
     }
 
     @Test
+    public void testShouldReturnNotFoundErrorWhenGettingPlanetsAndThereAreNoPlanetsYet() throws Exception{
+
+        when(mockService.findAll()).thenReturn(null);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/planets")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andReturn().getResponse();
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+        assertEquals(0, response.getContentLength());
+    }
+
+    @Test
+    public void testShouldReturnInternalServerErrorWhenGettingPlanetsAndOcurredInternalError() throws Exception{
+
+        when(mockService.findAll()).thenThrow(new NullPointerException("Some Error"));
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/planets")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andReturn().getResponse();
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
+    }
+
+    @Test
+    public void testShouldReturnBadRequestErrorWhenGettingPlanetsWithInvalidCredentials() throws Exception{
+
+        when(mockService.findAll()).thenThrow(
+                new StarWarsException(HttpStatus.BAD_REQUEST.value(),
+                        "Error getting planets",
+                        HttpStatus.BAD_REQUEST)
+        );
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/planets")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andReturn().getResponse();
+
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    }
+
+    @Test
     public void testShouldReturnAnPlanetWhenReceivAnId() throws Exception{
 
         when(mockService.findById(1)).thenReturn("Estrela da Morte");
@@ -67,5 +109,49 @@ public class PlanetsControllerTest {
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals("Estrela da Morte", response.getContentAsString());
+    }
+
+    @Test
+    public void testShouldReturnNotFoundErrorWhenReceivAnIdNonexistent() throws Exception{
+
+        when(mockService.findById(1)).thenReturn("Estrela da Morte");
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/planets/2")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andReturn().getResponse();
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+        assertEquals(0, response.getContentLength());
+    }
+
+    @Test
+    public void testShouldReturnInternalServerErrorWhenReceivAnIdAndOcurredInternalError() throws Exception{
+
+        when(mockService.findById(0)).thenThrow(new NullPointerException("Some Error"));
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/planets/0")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andReturn().getResponse();
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
+    }
+
+    @Test
+    public void testShouldReturnBadRequestErrorWhenReceivAnInvalidId() throws Exception{
+
+        when(mockService.findById(000)).thenThrow(
+                new StarWarsException(HttpStatus.BAD_REQUEST.value(),
+                        "Error getting planet",
+                        HttpStatus.BAD_REQUEST)
+        );
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/planets/000")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andReturn().getResponse();
+
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
     }
 }

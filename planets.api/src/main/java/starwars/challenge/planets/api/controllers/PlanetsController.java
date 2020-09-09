@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 
 import java.util.List;
@@ -45,6 +46,10 @@ public class PlanetsController {
                     .map(x -> ResponseEntity.ok().body(planets))
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
+        catch (StarWarsException ex){
+            log.error("Error getting planets ", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+        }
         catch (Exception ex){
             log.error("Error getting planets ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -70,6 +75,10 @@ public class PlanetsController {
             return Optional.ofNullable(planet)
                     .map(x -> ResponseEntity.ok().body(planet))
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        }
+        catch (StarWarsException ex){
+            log.error("Error getting planet ", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex);
         }
         catch (Exception ex){
             log.error("Error getting planet ", ex);
