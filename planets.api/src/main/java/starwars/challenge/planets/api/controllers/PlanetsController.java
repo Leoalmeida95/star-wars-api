@@ -10,9 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import starwars.challenge.planets.api.domain.PlanetRequestModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +34,7 @@ public class PlanetsController {
             notes="Todos os planetas dos mais variados tipos e características",
             response = String.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Lista de planetas retornados", response = String[].class),
+            @ApiResponse(code = 200, message = "Todos os planetas retornados", response = String[].class),
             @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
             @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar os planetas"),
@@ -123,7 +126,7 @@ public class PlanetsController {
             notes="O planeta será destruído por meio da sua identificação",
             response = String.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Um plante removido", response = String.class),
+            @ApiResponse(code = 200, message = "Um plante foi removido", response = String.class),
             @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
             @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar o planeta"),
@@ -133,6 +136,36 @@ public class PlanetsController {
         try{
             planetsService.delete(id);
             return ResponseEntity.ok().build();
+        }
+        catch (StarWarsException ex){
+            log.error("Error deleting an planet by id ", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+        }
+        catch (Exception ex){
+            log.error("Error deleting an planet by id ", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping
+    @ResponseBody
+    @ApiOperation(value = "Cria um novo planeta",
+            notes="O planeta terá um Nome, Clima e Terreno",
+            response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Um novo planeta foi criado", response = String.class),
+            @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
+            @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar o planeta"),
+    })
+    public ResponseEntity add(@Valid @RequestBody PlanetRequestModel request){
+        try{
+
+            String result = planetsService.add(request);
+            return Optional.ofNullable(result)
+                    .map(id -> {
+                        return ResponseEntity.created(URI.create("/planets/"+id)).body(result);
+                    })
+                    .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
         }
         catch (StarWarsException ex){
             log.error("Error deleting an planet by id ", ex);
