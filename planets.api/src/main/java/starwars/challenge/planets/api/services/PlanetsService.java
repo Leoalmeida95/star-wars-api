@@ -25,4 +25,11 @@ public class PlanetsService {
 
         return planet;
     }
+
+    public String findByName(String name){
+
+        String planet = "";
+
+        return planet;
+    }
 }
