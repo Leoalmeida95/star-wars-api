@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.json.JSONException;
 import org.json.JSONObject;
+import starwars.challenge.planets.api.exceptions.StarWarsException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +32,9 @@ public class PlanetsService {
         String planet = "";
 
         return planet;
+    }
+
+    public void delete(Integer id) throws StarWarsException {
+
     }
 }

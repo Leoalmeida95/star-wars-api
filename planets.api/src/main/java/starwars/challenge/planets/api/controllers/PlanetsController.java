@@ -31,7 +31,7 @@ public class PlanetsController {
             notes="Todos os planetas dos mais variados tipos e características",
             response = String.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Retorna uma lista de planetas", response = String[].class),
+            @ApiResponse(code = 200, message = "Lista de planetas retornados", response = String[].class),
             @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
             @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar os planetas"),
@@ -61,13 +61,13 @@ public class PlanetsController {
             notes="Cada Planeta tem um identificador próprio e único",
             response = String.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Retorna um planeta", response = String.class),
+            @ApiResponse(code = 200, message = "Um planeta retornado", response = String.class),
             @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
             @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar o planeta"),
     })
     public ResponseEntity findById(@PathVariable(name = "id", required = true)
-                                       @ApiParam(value = "id", example = "1000", name= "Id do usuário", required = true ) Integer id){
+                                       @ApiParam(value = "id", example = "1000", name= "Identificação do planeta", required = true ) Integer id){
         try{
 
             String planet = planetsService.findById(id);
@@ -92,7 +92,7 @@ public class PlanetsController {
             notes="Cada Planeta tem um nome próprio e único",
             response = String.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Retorna um planeta", response = String.class),
+            @ApiResponse(code = 200, message = "Um planeta retornado", response = String.class),
             @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
             @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar o planeta"),
@@ -113,6 +113,33 @@ public class PlanetsController {
         }
         catch (Exception ex){
             log.error("Error getting planet by name ", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping(value = "{id}")
+    @ResponseBody
+    @ApiOperation(value = "Destrói um planeta inteiro",
+            notes="O planeta será destruído por meio da sua identificação",
+            response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Um plante removido", response = String.class),
+            @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
+            @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
+            @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar o planeta"),
+    })
+    public ResponseEntity delete(@PathVariable(name = "id", required = true)
+                                     @ApiParam(value = "id", example = "1000", name= "Identificação do planeta", required = true ) Integer id){
+        try{
+            planetsService.delete(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (StarWarsException ex){
+            log.error("Error deleting an planet by id ", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+        }
+        catch (Exception ex){
+            log.error("Error deleting an planet by id ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
