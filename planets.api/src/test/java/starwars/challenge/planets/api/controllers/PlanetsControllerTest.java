@@ -13,6 +13,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import starwars.challenge.planets.api.domain.PlanetRequestModel;
+import starwars.challenge.planets.api.domain.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 
@@ -43,17 +44,21 @@ public class PlanetsControllerTest {
     @Test
     public void testShouldReturnArrayOfPlanetsWhenGettingAllPlanets() throws Exception {
 
-        List<String> planets = new ArrayList<>();
-        planets.add("Dagobah");
-        planets.add("Estrela da Morte");
-        planets.add("Endor");
+        List<PlanetResponseModel> planets = new ArrayList<>();
+        PlanetResponseModel model = PlanetResponseModel.builder()
+                                        .id("1")
+                                        .name("Dagobah")
+                                        .climate("stormy")
+                                        .terrain("ground")
+                                        .build();
+        planets.add(model);
 
         when(mockService.findAll()).thenReturn(planets);
 
         MockHttpServletResponse response = performMockHttpGet("/planets");
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals("[\"Dagobah\",\"Estrela da Morte\",\"Endor\"]",
+        assertEquals("[{\"id\":\"1\",\"name\":\"Dagobah\",\"climate\":\"stormy\",\"terrain\":\"ground\"}]",
                 response.getContentAsString());
     }
 

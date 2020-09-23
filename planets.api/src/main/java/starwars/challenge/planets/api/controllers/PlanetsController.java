@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import starwars.challenge.planets.api.domain.PlanetRequestModel;
+import starwars.challenge.planets.api.domain.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 
@@ -32,9 +33,9 @@ public class PlanetsController {
     @ResponseBody
     @ApiOperation(value = "Retorna todos os Planetas do universo",
             notes="Todos os planetas dos mais variados tipos e características",
-            response = String.class)
+            response = PlanetResponseModel.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Todos os planetas retornados", response = String[].class),
+            @ApiResponse(code = 200, message = "Todos os planetas retornados", response = PlanetResponseModel.class),
             @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
             @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar os planetas"),
@@ -42,14 +43,13 @@ public class PlanetsController {
     public ResponseEntity findAll(){
         try{
 
-            List<String> planets = planetsService.findAll();
+            List<PlanetResponseModel> planets = planetsService.findAll();
 
             return Optional.ofNullable(planets)
                     .map(x -> ResponseEntity.ok().body(planets))
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
         catch (StarWarsException ex){
-            log.error("Error getting all planets ", ex);
             return ResponseEntity.status(ex.getStatusCode()).body(ex);
         }
         catch (Exception ex){

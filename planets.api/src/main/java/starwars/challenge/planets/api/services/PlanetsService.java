@@ -2,10 +2,12 @@ package starwars.challenge.planets.api.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import starwars.challenge.planets.api.domain.Planet;
 import starwars.challenge.planets.api.domain.PlanetRequestModel;
+import starwars.challenge.planets.api.domain.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
+import starwars.challenge.planets.api.repository.PlanetsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +16,19 @@ import java.util.List;
 @Service
 public class PlanetsService {
 
-    public List<String> findAll(){
+    private final PlanetsRepository planetsRepository;
 
-        List<String> planets = new ArrayList<>();
+    public List<PlanetResponseModel> findAll(){
 
-        return planets;
+        List<Planet> planets = planetsRepository.findAll();
+        List<PlanetResponseModel> responses = new ArrayList<PlanetResponseModel>();
+
+        for(Planet planet: planets){
+            PlanetResponseModel response = planet._toConvertPlanetResponseModel();
+            responses.add(response);
+        }
+
+        return responses;
     }
 
     public String findById(Integer id){
