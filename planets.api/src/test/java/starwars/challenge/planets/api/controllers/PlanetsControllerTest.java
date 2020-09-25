@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import starwars.challenge.planets.api.domain.Planet;
 import starwars.challenge.planets.api.domain.PlanetRequestModel;
 import starwars.challenge.planets.api.domain.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
@@ -101,14 +102,21 @@ public class PlanetsControllerTest {
     @Test
     public void testShouldCreateAnPlanet() throws Exception {
 
-        String name = "Dagobah";
-        PlanetRequestModel model = PlanetRequestModel.builder().name(name).build();
-        when(mockService.add(model)).thenReturn(name);
+        PlanetRequestModel model = PlanetRequestModel
+                                    .builder()
+                                    .name("Dagobah")
+                                    .climate("stormy")
+                                    .terrain("ground")
+                                    .build();
+
+        Planet result = model._toConvertPlanet();
+
+        when(mockService.add(model)).thenReturn(result._toConvertPlanetResponseModel());
 
         MockHttpServletResponse response = performMockHttpPost("/planets", model);
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals(name, response.getContentAsString());
+        assertEquals("{\"id\":null,\"name\":\"Dagobah\",\"climate\":\"stormy\",\"terrain\":\"ground\"}", response.getContentAsString());
     }
 
     @Test
@@ -158,8 +166,9 @@ public class PlanetsControllerTest {
     @Test
     public void testShouldReturnInternalServerErrorWhenReceivAnPlanetToCreateAndOcurredInternalError() throws Exception{
 
-        String name = "Dagobah";
-        PlanetRequestModel model = PlanetRequestModel.builder().name(name).build();
+        PlanetRequestModel model = PlanetRequestModel
+                                    .builder()
+                                    .build();
         when(mockService.add(model)).thenThrow(new NullPointerException("Some Error"));
 
         MockHttpServletResponse response = performMockHttpPost("/planets", model);
@@ -230,12 +239,13 @@ public class PlanetsControllerTest {
     @Test
     public void testShouldReturnBadRequestErrorWhenReceivAnInvalidPlanetToCreate() throws Exception{
 
-        String name = "Dagobah";
-        PlanetRequestModel model = PlanetRequestModel.builder().name(name).build();
+        PlanetRequestModel model = PlanetRequestModel
+                                    .builder()
+                                    .build();
         when(mockService.add(model)).thenThrow(
-                new StarWarsException(HttpStatus.BAD_REQUEST.value(),
-                        "Error creating an planet",
-                        HttpStatus.BAD_REQUEST)
+                                        new StarWarsException(HttpStatus.BAD_REQUEST.value(),
+                                                "Error creating an planet",
+                                                HttpStatus.BAD_REQUEST)
         );
 
         MockHttpServletResponse response = performMockHttpPost("/planets", model);

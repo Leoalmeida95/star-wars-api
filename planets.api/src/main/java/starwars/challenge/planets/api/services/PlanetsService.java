@@ -49,8 +49,12 @@ public class PlanetsService {
 
     }
 
-    public String add(PlanetRequestModel model) throws StarWarsException {
+    public PlanetResponseModel add(PlanetRequestModel model) throws StarWarsException {
 
-        return  "";
+        Planet planet = model._toConvertPlanet();
+
+        planetsRepository.insert(planet);
+
+        return planet._toConvertPlanetResponseModel();
     }
 }
