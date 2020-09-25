@@ -1,7 +1,11 @@
-run: rm down build up
+clear: clear.images clear.volumes
 
-rm:
+run: down build up
+
+clear.images:
 	sudo docker image prune
+clear.volumes:
+	sudo docker volume prune
 down:
 	sudo docker-compose down
 build:
