@@ -125,15 +125,15 @@ public class PlanetsController {
     @ResponseBody
     @ApiOperation(value = "Destrói um planeta inteiro",
             notes="O planeta será destruído por meio da sua identificação",
-            response = String.class)
+            response = ResponseEntity.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Um plante foi removido", response = String.class),
+            @ApiResponse(code = 200, message = "Um plante foi removido", response = ResponseEntity.class),
             @ApiResponse(code = 400, message = "A requisição não poder ser atendida devivo a uma sintaxe incorreta"),
             @ApiResponse(code = 404, message = "Nenhum planeta foi encontrado"),
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar o planeta"),
     })
     public ResponseEntity delete(@PathVariable(name = "id", required = true)
-                                     @ApiParam(value = "id", example = "1000", name= "Identificação do planeta", required = true ) Integer id){
+                                     @ApiParam(value = "id", example = "1000", name= "Identificação do planeta", required = true ) String id){
         try{
             planetsService.delete(id);
             return ResponseEntity.ok().build();

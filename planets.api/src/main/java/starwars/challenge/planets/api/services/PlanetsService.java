@@ -11,6 +11,7 @@ import starwars.challenge.planets.api.repository.PlanetsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -45,8 +46,10 @@ public class PlanetsService {
         return planet;
     }
 
-    public void delete(Integer id) throws StarWarsException {
-
+    public void delete(String id) throws StarWarsException {
+        Optional<Planet> optional = planetsRepository.findById(id);
+        Planet planet = optional.get();
+        planetsRepository.delete(planet);
     }
 
     public PlanetResponseModel add(PlanetRequestModel model) throws StarWarsException {

@@ -3,8 +3,6 @@ package starwars.challenge.planets.api.services;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import starwars.challenge.planets.api.domain.Planet;
@@ -14,10 +12,10 @@ import starwars.challenge.planets.api.repository.PlanetsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PlanetsServiceTest {
 
@@ -32,7 +30,7 @@ public class PlanetsServiceTest {
     }
 
     @Test
-    public void testShouldReturnArrayOfPlanetsWhenGettingAllPlanets() throws Exception {
+    public void TestShouldReturnArrayOfPlanetsWhenGettingAllPlanets() throws Exception {
 
         List<Planet> planets = new ArrayList<Planet>();
         Planet model = Planet.builder()
@@ -57,7 +55,7 @@ public class PlanetsServiceTest {
     }
 
     @Test
-    public void testShouldReturnEmptyArrayOfPlanetsWhenGettingAllPlanetsAndThereAreNoPlanets() throws Exception {
+    public void TestShouldReturnEmptyArrayOfPlanetsWhenGettingAllPlanetsAndThereAreNoPlanets() throws Exception {
 
         List<Planet> planets = new ArrayList<Planet>();
         List<PlanetResponseModel> expected = new ArrayList<PlanetResponseModel>();
@@ -70,7 +68,7 @@ public class PlanetsServiceTest {
     }
 
     @Test
-    public void testShouldCreateAnPlanet() throws Exception {
+    public void TestShouldCreateAnPlanet() throws Exception {
 
         PlanetRequestModel model = PlanetRequestModel
                 .builder()
@@ -85,5 +83,21 @@ public class PlanetsServiceTest {
         PlanetResponseModel response = planetsService.add(model);
 
         assertEquals(result._toConvertPlanetResponseModel(), response);
+    }
+
+    @Test
+    public void TestShouldDeleteAnPlanet() throws Exception {
+
+        String id = "1";
+        Planet planet = Planet
+                .builder()
+                .name("Dagobah")
+                .climate("stormy")
+                .terrain("ground")
+                .build();
+
+        when(mockService.findById(id)).thenReturn(Optional.ofNullable(planet));
+        doNothing().when(mockService).delete(planet);
+        planetsService.delete(id);
     }
 }

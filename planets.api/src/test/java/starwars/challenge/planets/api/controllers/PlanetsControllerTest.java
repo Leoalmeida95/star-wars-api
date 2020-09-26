@@ -43,7 +43,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnArrayOfPlanetsWhenGettingAllPlanets() throws Exception {
+    public void TestShouldReturnArrayOfPlanetsWhenGettingAllPlanets() throws Exception {
 
         List<PlanetResponseModel> planets = new ArrayList<>();
         PlanetResponseModel model = PlanetResponseModel.builder()
@@ -64,7 +64,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnAnPlanetWhenReceivAnId() throws Exception{
+    public void TestShouldReturnAnPlanetWhenReceivAnId() throws Exception{
 
         Integer id = 1;
         String result = "Estrela da Morte";
@@ -77,7 +77,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnAnPlanetWhenReceivAnName() throws Exception {
+    public void TestShouldReturnAnPlanetWhenReceivAnName() throws Exception {
 
         String name = "teste";
         String result = "Estrela da Morte";
@@ -90,9 +90,9 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldDeleteAnPlanetWhenReceivAnId() throws Exception {
+    public void TestShouldDeleteAnPlanetWhenReceivAnId() throws Exception {
 
-        Integer id = 1;
+        String id = "1";
 
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
 
@@ -100,7 +100,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldCreateAnPlanet() throws Exception {
+    public void TestShouldCreateAnPlanet() throws Exception {
 
         PlanetRequestModel model = PlanetRequestModel
                                     .builder()
@@ -120,7 +120,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnInternalServerErrorWhenGettingAllPlanetsAndOcurredInternalError() throws Exception{
+    public void TestShouldReturnInternalServerErrorWhenGettingAllPlanetsAndOcurredInternalError() throws Exception{
 
         when(mockService.findAll()).thenThrow(new NullPointerException("Some Error"));
 
@@ -130,7 +130,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnInternalServerErrorWhenReceivAnIdAndOcurredInternalError() throws Exception{
+    public void TestShouldReturnInternalServerErrorWhenReceivAnIdAndOcurredInternalError() throws Exception{
 
         Integer id = 0;
         when(mockService.findById(id)).thenThrow(new NullPointerException("Some Error"));
@@ -141,7 +141,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnInternalServerErrorWhenReceivAnNameAndOcurredInternalError() throws Exception{
+    public void TestShouldReturnInternalServerErrorWhenReceivAnNameAndOcurredInternalError() throws Exception{
 
         String name = "teste";
         when(mockService.findByName(name)).thenThrow(new NullPointerException("Some Error"));
@@ -152,9 +152,9 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnInternalServerErrorWhenReceivAnIdToDeleteAndOcurredInternalError() throws Exception{
+    public void TestShouldReturnInternalServerErrorWhenReceivAnIdToDeleteAndOcurredInternalError() throws Exception{
 
-        Integer id = 1;
+        String id = "1";
         doThrow(new NullPointerException("Some Error")).when(mockService).delete(id);
 
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
@@ -164,7 +164,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnInternalServerErrorWhenReceivAnPlanetToCreateAndOcurredInternalError() throws Exception{
+    public void TestShouldReturnInternalServerErrorWhenReceivAnPlanetToCreateAndOcurredInternalError() throws Exception{
 
         PlanetRequestModel model = PlanetRequestModel
                                     .builder()
@@ -177,7 +177,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnBadRequestErrorWhenGettingAllPlanetsWithInvalidCredentials() throws Exception{
+    public void TestShouldReturnBadRequestErrorWhenGettingAllPlanetsWithInvalidCredentials() throws Exception{
 
         when(mockService.findAll()).thenThrow(
                 new StarWarsException(HttpStatus.BAD_REQUEST.value(),
@@ -191,7 +191,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnBadRequestErrorWhenReceivAnInvalidId() throws Exception{
+    public void TestShouldReturnBadRequestErrorWhenReceivAnInvalidId() throws Exception{
 
         Integer id = 000;
         when(mockService.findById(id)).thenThrow(
@@ -206,7 +206,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnBadRequestErrorWhenReceivAnInvalidName() throws Exception{
+    public void TestShouldReturnBadRequestErrorWhenReceivAnInvalidName() throws Exception{
 
         String name = "teste";
         when(mockService.findByName(name)).thenThrow(
@@ -221,9 +221,9 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnBadRequestErrorWhenReceivAnInvalidIdToDelete() throws Exception{
+    public void TestShouldReturnBadRequestErrorWhenReceivAnInvalidIdToDelete() throws Exception{
 
-        Integer id = 1;
+        String id = "1";
         doThrow(new StarWarsException(
                 HttpStatus.BAD_REQUEST.value(),
                 "Error deleting an planet by id",
@@ -237,7 +237,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnBadRequestErrorWhenReceivAnInvalidPlanetToCreate() throws Exception{
+    public void TestShouldReturnBadRequestErrorWhenReceivAnInvalidPlanetToCreate() throws Exception{
 
         PlanetRequestModel model = PlanetRequestModel
                                     .builder()
@@ -255,7 +255,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnNotFoundErrorWhenGettingAllPlanetsAndThereAreNoPlanetsYet() throws Exception{
+    public void TestShouldReturnNotFoundErrorWhenGettingAllPlanetsAndThereAreNoPlanetsYet() throws Exception{
 
         when(mockService.findAll()).thenReturn(null);
 
@@ -266,7 +266,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnNotFoundErrorWhenReceivAnIdNonexistent() throws Exception{
+    public void TestShouldReturnNotFoundErrorWhenReceivAnIdNonexistent() throws Exception{
 
         Integer id = 1;
         when(mockService.findById(id)).thenReturn(null);
@@ -278,7 +278,7 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnNotFoundErrorWhenReceivAnNameNonexistent() throws Exception{
+    public void TestShouldReturnNotFoundErrorWhenReceivAnNameNonexistent() throws Exception{
 
         String name = "teste";
         when(mockService.findByName(name)).thenReturn(null);
@@ -290,9 +290,9 @@ public class PlanetsControllerTest {
     }
 
     @Test
-    public void testShouldReturnNotFoundErrorWhenReceivAnIdNonexistentToDelete() throws Exception{
+    public void TestShouldReturnNotFoundErrorWhenReceivAnIdNonexistentToDelete() throws Exception{
 
-        Integer id = 1;
+        String id = "1";
         doThrow(new StarWarsException(
                 HttpStatus.NOT_FOUND.value(),
                 "Error deleting an planet by id",
