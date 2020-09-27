@@ -12,9 +12,9 @@ API Rest Java com SpringBoot, Docker e documentação com Swagger.
 #### Execução
 > Entrar na pasta planets.api
 >
-> Executar comando 'make clear'
+> Executar comando 'make clean'
 >
-> Digite 'y' no terminal caso queira apagar imagens e/ou volumes não utilizadas do Docker. Caso contrário, digite 'N'
+> Digite 'y' no terminal para apagar imagens e/ou volumes não utilizadas do Docker, ou 'n' para mantê-los.
 >
 > Executar comando 'make run'
 
