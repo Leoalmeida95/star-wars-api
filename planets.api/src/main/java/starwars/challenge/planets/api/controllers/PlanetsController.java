@@ -10,14 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import starwars.challenge.planets.api.domain.Planet;
 import starwars.challenge.planets.api.domain.PlanetRequestModel;
 import starwars.challenge.planets.api.domain.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,10 +69,10 @@ public class PlanetsController {
             @ApiResponse(code = 500, message = "Ocorreu um erro ao buscar o planeta"),
     })
     public ResponseEntity findById(@PathVariable(name = "id", required = true)
-                                       @ApiParam(value = "id", example = "1000", name= "Identificação do planeta", required = true ) Integer id){
+                                       @ApiParam(value = "id", example = "1000", name= "Identificação do planeta", required = true ) String id){
         try{
 
-            String planet = planetsService.findById(id);
+            PlanetResponseModel planet = planetsService.findById(id);
 
             return Optional.ofNullable(planet)
                     .map(x -> ResponseEntity.ok().body(planet))

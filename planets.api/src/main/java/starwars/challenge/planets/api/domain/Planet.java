@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-@ApiModel(value = "Modelo de um Planeta", description = "A representação de cada planeta da galaxia")
+@ApiModel(value = "Planeta", description = "A representação de cada planeta da galaxia")
 public class Planet {
     @Id
     private String id;

@@ -88,16 +88,30 @@ public class PlanetsServiceTest {
     @Test
     public void TestShouldDeleteAnPlanet() throws Exception {
 
-        String id = "1";
-        Planet planet = Planet
+        String id = "5f70cd13614e827cf8d00fb3";
+        Planet planet = getPlanet();
+
+        when(mockService.findById(id)).thenReturn(Optional.ofNullable(planet));
+        doNothing().when(mockService).delete(planet);
+        planetsService.delete(id);
+    }
+
+    @Test
+    public void TestShouldReturnAnPlanetWhenReceivAnId() throws Exception {
+
+        String id = "5f70cd13614e827cf8d00fb3";
+        Planet planet = getPlanet();
+
+        when(mockService.findById(id)).thenReturn(Optional.ofNullable(planet));
+        planetsService.findById(id);
+    }
+
+    private Planet getPlanet(){
+        return Planet
                 .builder()
                 .name("Dagobah")
                 .climate("stormy")
                 .terrain("ground")
                 .build();
-
-        when(mockService.findById(id)).thenReturn(Optional.ofNullable(planet));
-        doNothing().when(mockService).delete(planet);
-        planetsService.delete(id);
     }
 }

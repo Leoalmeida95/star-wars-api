@@ -32,11 +32,12 @@ public class PlanetsService {
         return responses;
     }
 
-    public String findById(Integer id){
+    public PlanetResponseModel findById(String id) throws StarWarsException{
 
-        String planet = "";
+        Optional<Planet> optional = planetsRepository.findById(id);
+        Planet planet = optional.get();
 
-        return planet;
+        return planet._toConvertPlanetResponseModel();
     }
 
     public String findByName(String name){
@@ -48,7 +49,7 @@ public class PlanetsService {
 
     public void delete(String id) throws StarWarsException {
         Optional<Planet> optional = planetsRepository.findById(id);
-        Planet planet = optional.get();
+        Planet planet =  optional.get();
         planetsRepository.delete(planet);
     }
 

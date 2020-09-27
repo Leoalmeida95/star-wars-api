@@ -46,12 +46,7 @@ public class PlanetsControllerTest {
     public void TestShouldReturnArrayOfPlanetsWhenGettingAllPlanets() throws Exception {
 
         List<PlanetResponseModel> planets = new ArrayList<>();
-        PlanetResponseModel model = PlanetResponseModel.builder()
-                                        .id("1")
-                                        .name("Dagobah")
-                                        .climate("stormy")
-                                        .terrain("ground")
-                                        .build();
+        PlanetResponseModel model = getPlanetResponseModel();
         planets.add(model);
 
         when(mockService.findAll()).thenReturn(planets);
@@ -66,14 +61,15 @@ public class PlanetsControllerTest {
     @Test
     public void TestShouldReturnAnPlanetWhenReceivAnId() throws Exception{
 
-        Integer id = 1;
-        String result = "Estrela da Morte";
-        when(mockService.findById(id)).thenReturn(result);
+        String id = "1";
+        PlanetResponseModel model = getPlanetResponseModel();
+        when(mockService.findById(id)).thenReturn(model);
 
         MockHttpServletResponse response = performMockHttpGet("/planets/" + id);
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(result, response.getContentAsString());
+        assertEquals("{\"id\":\"1\",\"name\":\"Dagobah\",\"climate\":\"stormy\",\"terrain\":\"ground\"}",
+                response.getContentAsString());
     }
 
     @Test
@@ -92,7 +88,7 @@ public class PlanetsControllerTest {
     @Test
     public void TestShouldDeleteAnPlanetWhenReceivAnId() throws Exception {
 
-        String id = "1";
+        String id = "5f70cd13614e827cf8d00fb3";
 
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
 
@@ -102,13 +98,7 @@ public class PlanetsControllerTest {
     @Test
     public void TestShouldCreateAnPlanet() throws Exception {
 
-        PlanetRequestModel model = PlanetRequestModel
-                                    .builder()
-                                    .name("Dagobah")
-                                    .climate("stormy")
-                                    .terrain("ground")
-                                    .build();
-
+        PlanetRequestModel model = getPlanetRequestModel();
         Planet result = model._toConvertPlanet();
 
         when(mockService.add(model)).thenReturn(result._toConvertPlanetResponseModel());
@@ -132,7 +122,7 @@ public class PlanetsControllerTest {
     @Test
     public void TestShouldReturnInternalServerErrorWhenReceivAnIdAndOcurredInternalError() throws Exception{
 
-        Integer id = 0;
+        String id = "5f70cd13614e827cf8d00fb3";
         when(mockService.findById(id)).thenThrow(new NullPointerException("Some Error"));
 
         MockHttpServletResponse response = performMockHttpGet("/planets/"+id);
@@ -193,7 +183,7 @@ public class PlanetsControllerTest {
     @Test
     public void TestShouldReturnBadRequestErrorWhenReceivAnInvalidId() throws Exception{
 
-        Integer id = 000;
+        String id = "000";
         when(mockService.findById(id)).thenThrow(
                 new StarWarsException(HttpStatus.BAD_REQUEST.value(),
                         "Error getting planet by id",
@@ -268,7 +258,7 @@ public class PlanetsControllerTest {
     @Test
     public void TestShouldReturnNotFoundErrorWhenReceivAnIdNonexistent() throws Exception{
 
-        Integer id = 1;
+        String id = "5f70cd13614e827cf8d00fb3";
         when(mockService.findById(id)).thenReturn(null);
 
         MockHttpServletResponse response = performMockHttpGet("/planets/"+id);
@@ -329,5 +319,23 @@ public class PlanetsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                         .andReturn().getResponse();
+    }
+
+    private PlanetResponseModel getPlanetResponseModel(){
+        return PlanetResponseModel.builder()
+                .id("1")
+                .name("Dagobah")
+                .climate("stormy")
+                .terrain("ground")
+                .build();
+    }
+
+    private PlanetRequestModel getPlanetRequestModel(){
+        return PlanetRequestModel
+                .builder()
+                .name("Dagobah")
+                .climate("stormy")
+                .terrain("ground")
+                .build();
     }
 }
