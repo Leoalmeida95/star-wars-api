@@ -8,6 +8,7 @@ import starwars.challenge.planets.api.domain.PlanetRequestModel;
 import starwars.challenge.planets.api.domain.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.repository.PlanetsRepository;
+import starwars.challenge.planets.api.validation.PlanetsValidation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class PlanetsService {
 
     private final PlanetsRepository planetsRepository;
+    private final PlanetsValidation planetsValidation;
 
     public List<PlanetResponseModel> findAll(){
 
@@ -62,6 +64,7 @@ public class PlanetsService {
 
     public PlanetResponseModel add(PlanetRequestModel model) throws StarWarsException {
 
+        planetsValidation.verifyProperties(model.getName(), model.getClimate(), model.getTerrain());
         Planet planet = model._toConvertPlanet();
 
         planetsRepository.insert(planet);

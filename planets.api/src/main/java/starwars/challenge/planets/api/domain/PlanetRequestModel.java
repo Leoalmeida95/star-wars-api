@@ -1,20 +1,28 @@
 package starwars.challenge.planets.api.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @ApiModel(value = "Modelo de requisição de um Planeta", description = "Modelo para requisições de planetas")
 public class PlanetRequestModel {
 
+    @NotEmpty(message = "Name is required")
+    @NotNull(message = "Name is required")
     @ApiModelProperty(value = "Name do planeta", required = true)
     private String name;
+    @NotEmpty(message = "Climate is required")
+    @NotNull(message = "Climate is required")
     @ApiModelProperty(value = "Clima do planeta", required = true)
     private String climate;
+    @NotEmpty(message = "Terrain is required")
+    @NotNull(message = "Terrain is required")
     @ApiModelProperty(value = "Terreno do planeta", required = true)
     private String terrain;
 
