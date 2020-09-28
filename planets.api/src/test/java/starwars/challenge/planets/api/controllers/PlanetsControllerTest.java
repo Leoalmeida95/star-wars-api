@@ -76,13 +76,16 @@ public class PlanetsControllerTest {
     public void TestShouldReturnAnPlanetWhenReceivAnName() throws Exception {
 
         String name = "teste";
-        String result = "Estrela da Morte";
-        when(mockService.findByName(name)).thenReturn(result);
+        List<PlanetResponseModel> planets = new ArrayList<>();
+        PlanetResponseModel model = getPlanetResponseModel();
+        planets.add(model);
+        when(mockService.findByName(name)).thenReturn(planets);
 
         MockHttpServletResponse response = performMockHttpGet("/planets?name="+name);
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(result, response.getContentAsString());
+        assertEquals("[{\"id\":\"1\",\"name\":\"Dagobah\",\"climate\":\"stormy\",\"terrain\":\"ground\"}]",
+                response.getContentAsString());
     }
 
     @Test

@@ -32,14 +32,9 @@ public class PlanetsServiceTest {
     @Test
     public void TestShouldReturnArrayOfPlanetsWhenGettingAllPlanets() throws Exception {
 
-        List<Planet> planets = new ArrayList<Planet>();
-        Planet model = Planet.builder()
-                .id("1")
-                .name("Dagobah")
-                .climate("stormy")
-                .terrain("ground")
-                .build();
-        planets.add(model);
+        List<Planet> planets = new ArrayList<>();
+        Planet planet_response = getPlanet();
+        planets.add(planet_response);
 
         when(mockService.findAll()).thenReturn(planets);
         List<PlanetResponseModel> responses = planetsService.findAll();
@@ -104,6 +99,28 @@ public class PlanetsServiceTest {
 
         when(mockService.findById(id)).thenReturn(Optional.ofNullable(planet));
         planetsService.findById(id);
+    }
+
+    @Test
+    public void TestShouldReturnAnArrayOfPlanetsWhenReceivAnName() throws Exception {
+
+        String name = "Dagobah";
+        List<Planet> planets = new ArrayList<>();
+        Planet planet_response = getPlanet();
+        planets.add(planet_response);
+        Optional<ArrayList<Planet>> result = Optional.of((ArrayList<Planet>) planets);
+
+        when(mockService.findByName(name)).thenReturn(result);
+        List<PlanetResponseModel> responses = planetsService.findByName(name);
+
+        List<PlanetResponseModel> expected = new ArrayList<PlanetResponseModel>();
+        for(Planet planet: planets){
+            PlanetResponseModel response = planet._toConvertPlanetResponseModel();
+            expected.add(response);
+        }
+
+        Assert.assertFalse(responses.isEmpty());
+        Assert.assertEquals(expected, responses);
     }
 
     private Planet getPlanet(){

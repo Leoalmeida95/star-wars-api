@@ -103,10 +103,10 @@ public class PlanetsController {
                                          @ApiParam(value = "name", example = "Estrela da Morte", name= "Nome do Planeta", required = true ) String name){
         try{
 
-            String planet = planetsService.findByName(name);
+            List<PlanetResponseModel> planets = planetsService.findByName(name);
 
-            return Optional.ofNullable(planet)
-                    .map(x -> ResponseEntity.ok().body(planet))
+            return Optional.ofNullable(planets)
+                    .map(x -> ResponseEntity.ok().body(planets))
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
         catch (StarWarsException ex){

@@ -40,11 +40,18 @@ public class PlanetsService {
         return planet._toConvertPlanetResponseModel();
     }
 
-    public String findByName(String name){
+    public List<PlanetResponseModel> findByName(String name){
 
-        String planet = "";
+        Optional<ArrayList<Planet>> optional = planetsRepository.findByName(name);
+        ArrayList<Planet> planets = optional.get();
+        List<PlanetResponseModel> responses = new ArrayList<PlanetResponseModel>();
 
-        return planet;
+        for(Planet planet: planets){
+            PlanetResponseModel response = planet._toConvertPlanetResponseModel();
+            responses.add(response);
+        }
+
+        return responses;
     }
 
     public void delete(String id) throws StarWarsException {
