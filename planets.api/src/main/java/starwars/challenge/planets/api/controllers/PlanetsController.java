@@ -49,7 +49,7 @@ public class PlanetsController {
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
         catch (StarWarsException ex){
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toFormat());
         }
         catch (Exception ex){
             log.error("Error getting all planets", ex);
@@ -80,7 +80,7 @@ public class PlanetsController {
         }
         catch (StarWarsException ex){
             log.error("Error getting planet by id", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toFormat());
         }
         catch (Exception ex){
             log.error("Error getting planet by id", ex);
@@ -111,7 +111,7 @@ public class PlanetsController {
         }
         catch (StarWarsException ex){
             log.error("Error getting planet by name", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toFormat());
         }
         catch (Exception ex){
             log.error("Error getting planet by name", ex);
@@ -138,7 +138,7 @@ public class PlanetsController {
         }
         catch (StarWarsException ex){
             log.error("Error deleting an planet by id", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toFormat());
         }
         catch (Exception ex){
             log.error("Error deleting an planet by id", ex);
@@ -167,7 +167,7 @@ public class PlanetsController {
         }
         catch (StarWarsException ex){
             log.error("Error adding an planet", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toFormat());
         }
         catch (Exception ex){
             log.error("Error adding an planet", ex);

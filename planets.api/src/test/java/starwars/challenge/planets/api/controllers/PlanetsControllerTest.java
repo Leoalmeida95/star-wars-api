@@ -109,7 +109,8 @@ public class PlanetsControllerTest {
         MockHttpServletResponse response = performMockHttpPost("/planets", model);
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals("{\"id\":null,\"name\":\"Dagobah\",\"climate\":\"stormy\",\"terrain\":\"ground\"}", response.getContentAsString());
+        assertEquals("{\"id\":null,\"name\":\"Dagobah\",\"climate\":\"stormy\",\"terrain\":\"ground\"}",
+                response.getContentAsString());
     }
 
     @Test
@@ -219,7 +220,8 @@ public class PlanetsControllerTest {
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals(ex.toString(), response.getContentAsString());
+        assertEquals("{\"statuscode\":\"400 BAD_REQUEST\",\"code\":\"400\",\"message\":\"Error deleting an planet by id\",\"status\":\"Error\"}",
+                response.getContentAsString());
     }
 
     @Test
@@ -236,7 +238,8 @@ public class PlanetsControllerTest {
         MockHttpServletResponse response = performMockHttpPost("/planets", model);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals(ex.toString(), response.getContentAsString());
+        assertEquals("{\"statuscode\":\"400 BAD_REQUEST\",\"code\":\"400\",\"message\":\"Error creating an planet\",\"status\":\"Error\"}",
+                response.getContentAsString());
     }
 
     @Test
@@ -286,7 +289,8 @@ public class PlanetsControllerTest {
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
-        assertEquals(ex.toString(), response.getContentAsString());
+        assertEquals("{\"statuscode\":\"404 NOT_FOUND\",\"code\":\"404\",\"message\":\"This planet not exists\",\"status\":\"Error\"}",
+                response.getContentAsString());
     }
 
     private MockHttpServletResponse performMockHttpDelete(String url) throws Exception {
