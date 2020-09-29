@@ -12,9 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import starwars.challenge.planets.api.domain.Planet;
-import starwars.challenge.planets.api.domain.PlanetRequestModel;
-import starwars.challenge.planets.api.domain.PlanetResponseModel;
+import starwars.challenge.planets.api.domains.Planet;
+import starwars.challenge.planets.api.domains.PlanetRequestModel;
+import starwars.challenge.planets.api.domains.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 

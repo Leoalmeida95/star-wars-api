@@ -1,4 +1,4 @@
-package starwars.challenge.planets.api.domain;
+package starwars.challenge.planets.api.domains;
 
 import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.Id;

@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
+import starwars.challenge.planets.api.validations.PlanetsValidation;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

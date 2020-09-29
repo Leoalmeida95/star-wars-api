@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import starwars.challenge.planets.api.domain.PlanetRequestModel;
-import starwars.challenge.planets.api.domain.PlanetResponseModel;
+import starwars.challenge.planets.api.domains.PlanetRequestModel;
+import starwars.challenge.planets.api.domains.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 import starwars.challenge.planets.api.services.PlanetsService;
 

@@ -1,10 +1,10 @@
-package starwars.challenge.planets.api.repository;
+package starwars.challenge.planets.api.repositorys;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
-import starwars.challenge.planets.api.domain.Planet;
+import starwars.challenge.planets.api.domains.Planet;
 
 import java.util.ArrayList;
 import java.util.Optional;

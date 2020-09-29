@@ -3,12 +3,12 @@ package starwars.challenge.planets.api.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import starwars.challenge.planets.api.domain.Planet;
-import starwars.challenge.planets.api.domain.PlanetRequestModel;
-import starwars.challenge.planets.api.domain.PlanetResponseModel;
+import starwars.challenge.planets.api.domains.Planet;
+import starwars.challenge.planets.api.domains.PlanetRequestModel;
+import starwars.challenge.planets.api.domains.PlanetResponseModel;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
-import starwars.challenge.planets.api.repository.PlanetsRepository;
-import starwars.challenge.planets.api.validation.PlanetsValidation;
+import starwars.challenge.planets.api.repositorys.PlanetsRepository;
+import starwars.challenge.planets.api.validations.PlanetsValidation;
 
 import java.util.ArrayList;
 import java.util.List;

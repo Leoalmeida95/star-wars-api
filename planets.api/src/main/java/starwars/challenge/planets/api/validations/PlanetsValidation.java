@@ -1,4 +1,4 @@
-package starwars.challenge.planets.api.validation;
+package starwars.challenge.planets.api.validations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
