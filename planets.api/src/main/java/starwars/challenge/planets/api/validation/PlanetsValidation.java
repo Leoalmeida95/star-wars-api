@@ -1,13 +1,13 @@
 package starwars.challenge.planets.api.validation;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import starwars.challenge.planets.api.exceptions.StarWarsException;
 
 @RequiredArgsConstructor
-@Builder
+
+
 @Configuration
 public class PlanetsValidation {
 

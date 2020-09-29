@@ -148,12 +148,13 @@ public class PlanetsControllerTest {
     public void TestShouldReturnInternalServerErrorWhenReceivAnIdToDeleteAndOcurredInternalError() throws Exception{
 
         String id = "1";
-        doThrow(new NullPointerException("Some Error")).when(mockService).delete(id);
+        NullPointerException ex = new NullPointerException("Some Error");
+        doThrow(ex).when(mockService).delete(id);
 
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
-        assertEquals(0, response.getContentLength());
+        assertTrue(response.getContentAsString().contains(ex.getLocalizedMessage()));
     }
 
     @Test
@@ -172,11 +173,8 @@ public class PlanetsControllerTest {
     @Test
     public void TestShouldReturnBadRequestErrorWhenGettingAllPlanetsWithInvalidCredentials() throws Exception{
 
-        when(mockService.findAll()).thenThrow(
-                new StarWarsException(HttpStatus.BAD_REQUEST.value(),
-                        "Error getting all planets",
-                        HttpStatus.BAD_REQUEST)
-        );
+        when(mockService.findAll()).thenThrow(getStarWarsException("Error getting all planets",
+                                                HttpStatus.BAD_REQUEST));
 
         MockHttpServletResponse response = performMockHttpGet("/planets");
 
@@ -188,10 +186,8 @@ public class PlanetsControllerTest {
 
         String id = "000";
         when(mockService.findById(id)).thenThrow(
-                new StarWarsException(HttpStatus.BAD_REQUEST.value(),
-                        "Error getting planet by id",
-                        HttpStatus.BAD_REQUEST)
-        );
+                getStarWarsException("Error getting planet by id",
+                        HttpStatus.BAD_REQUEST));
 
         MockHttpServletResponse response = performMockHttpGet("/planets/"+id);
 
@@ -203,10 +199,8 @@ public class PlanetsControllerTest {
 
         String name = "teste";
         when(mockService.findByName(name)).thenThrow(
-                new StarWarsException(HttpStatus.BAD_REQUEST.value(),
-                        "Error getting planet by name",
-                        HttpStatus.BAD_REQUEST)
-        );
+                getStarWarsException("Error getting planet by name",
+                        HttpStatus.BAD_REQUEST));
 
         MockHttpServletResponse response = performMockHttpGet("/planets?name="+name);
 
@@ -217,16 +211,15 @@ public class PlanetsControllerTest {
     public void TestShouldReturnBadRequestErrorWhenReceivAnInvalidIdToDelete() throws Exception{
 
         String id = "1";
-        doThrow(new StarWarsException(
-                HttpStatus.BAD_REQUEST.value(),
-                "Error deleting an planet by id",
-                HttpStatus.BAD_REQUEST))
-                .when(mockService).delete(id);
+        StarWarsException ex = getStarWarsException("Error deleting an planet by id",
+                HttpStatus.BAD_REQUEST);
+
+        doThrow(ex).when(mockService).delete(id);
 
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals(0, response.getContentLength());
+        assertEquals(ex.toString(), response.getContentAsString());
     }
 
     @Test
@@ -235,16 +228,15 @@ public class PlanetsControllerTest {
         PlanetRequestModel model = PlanetRequestModel
                                     .builder()
                                     .build();
-        when(mockService.add(model)).thenThrow(
-                                        new StarWarsException(HttpStatus.BAD_REQUEST.value(),
-                                                "Error creating an planet",
-                                                HttpStatus.BAD_REQUEST)
-        );
+        StarWarsException ex = getStarWarsException("Error creating an planet",
+                HttpStatus.BAD_REQUEST);
+
+        when(mockService.add(model)).thenThrow(ex);
 
         MockHttpServletResponse response = performMockHttpPost("/planets", model);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals(0, response.getContentLength());
+        assertEquals(ex.toString(), response.getContentAsString());
     }
 
     @Test
@@ -286,16 +278,15 @@ public class PlanetsControllerTest {
     public void TestShouldReturnNotFoundErrorWhenReceivAnIdNonexistentToDelete() throws Exception{
 
         String id = "1";
-        doThrow(new StarWarsException(
-                HttpStatus.NOT_FOUND.value(),
-                "Error deleting an planet by id",
-                HttpStatus.NOT_FOUND))
-                .when(mockService).delete(id);
+        StarWarsException ex = getStarWarsException("This planet not exists",
+                HttpStatus.NOT_FOUND);
+
+        doThrow(ex).when(mockService).delete(id);
 
         MockHttpServletResponse response = performMockHttpDelete("/planets/"+id);
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
-        assertEquals(0, response.getContentLength());
+        assertEquals(ex.toString(), response.getContentAsString());
     }
 
     private MockHttpServletResponse performMockHttpDelete(String url) throws Exception {
@@ -340,5 +331,12 @@ public class PlanetsControllerTest {
                 .climate("stormy")
                 .terrain("ground")
                 .build();
+    }
+
+    private StarWarsException getStarWarsException(String message, HttpStatus status){
+        return new StarWarsException(
+                status.value(),
+                message,
+                status);
     }
 }

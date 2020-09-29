@@ -49,11 +49,11 @@ public class PlanetsController {
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
         catch (StarWarsException ex){
-            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
         }
         catch (Exception ex){
-            log.error("Error getting all planets ", ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Error getting all planets", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.toString());
         }
     }
 
@@ -79,12 +79,12 @@ public class PlanetsController {
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
         catch (StarWarsException ex){
-            log.error("Error getting planet by id ", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+            log.error("Error getting planet by id", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
         }
         catch (Exception ex){
-            log.error("Error getting planet by id ", ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Error getting planet by id", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.toString());
         }
     }
 
@@ -110,12 +110,12 @@ public class PlanetsController {
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
         catch (StarWarsException ex){
-            log.error("Error getting planet by name ", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+            log.error("Error getting planet by name", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
         }
         catch (Exception ex){
-            log.error("Error getting planet by name ", ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Error getting planet by name", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.toString());
         }
     }
 
@@ -137,12 +137,12 @@ public class PlanetsController {
             return ResponseEntity.ok().build();
         }
         catch (StarWarsException ex){
-            log.error("Error deleting an planet by id ", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+            log.error("Error deleting an planet by id", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
         }
         catch (Exception ex){
-            log.error("Error deleting an planet by id ", ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Error deleting an planet by id", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.toString());
         }
     }
 
@@ -166,12 +166,12 @@ public class PlanetsController {
                     .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
         }
         catch (StarWarsException ex){
-            log.error("Error adding an planet by id ", ex);
-            return ResponseEntity.status(ex.getStatusCode()).body(ex);
+            log.error("Error adding an planet", ex);
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.toString());
         }
         catch (Exception ex){
-            log.error("Error adding an planet by id ", ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Error adding an planet", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.toString());
         }
     }
 }

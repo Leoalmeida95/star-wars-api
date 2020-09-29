@@ -19,4 +19,10 @@ public class StarWarsException extends RuntimeException{
         this.message = message;
         this.statusCode = statusCode;
     }
+
+    @Override
+    public String toString() {
+        return "Error{statuscode=" + this.getStatusCode()  + ", message=" + this.getMessage() + "}";
+    }
+
 }
